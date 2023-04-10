@@ -1,0 +1,198 @@
+service: symmetry-serverless
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-west-1
+
+# functions
+functions:
+  addEmployee:
+    handler: src/functions/employees/employee.addEmployee
+    events:
+      - http:
+          path: serverlessSetup/employees
+          method: post
+          cors: true
+  getEmployeeById:
+    handler: src/functions/employees/employee.getEmployeeById
+    events:
+      - http:
+          path: serverlessSetup/employees/{employeeId}
+          method: get
+          cors: true
+  getEmployeesByType:
+    handler: src/functions/employees/employee.getEmployeesByType
+    events:
+      - http:
+          path: serverlessSetup/employees/type/{typeOfEmployee}
+          method: get
+          cors: true
+  getEmployees:
+    handler: src/functions/employees/employee.getEmployees
+    events:
+      - http:
+          path: serverlessSetup/employees
+          method: get
+          cors: true
+  deleteEmployeeById:
+    handler: src/functions/employees/employee.deleteEmployeeById
+    events:
+      - http:
+          path: serverlessSetup/employees/{employeeId}
+          method: delete
+          cors: true
+  signUp:
+    handler: src/functions/auth.signUpHandler
+    events:
+      - http:
+          path: serverlessSetup/auth/sign-up
+          method: post
+          cors: true
+  signIn:
+    handler: src/functions/auth.signInHandler
+    events:
+      - http:
+          path: serverlessSetup/auth/sign-in
+          method: post
+          cors: true
+  resendVerificationCode:
+    handler: src/functions/auth.resendVerificationCodeHandler
+    events:
+      - http:
+          path: serverlessSetup/auth/resendVerificationCode
+          method: post
+          cors: true
+  verify:
+    handler: src/functions/auth.verificationHandler
+    events:
+      - http:
+          path: serverlessSetup/auth/verify
+          method: post
+          cors: true
+  addInventory:
+    handler: src/functions/inventory/inventory.addInventory
+    events:
+      - http:
+          path: serverlessSetup/inventory/{employeeId}
+          method: post
+          cors: true
+  getInventoryById:
+    handler: src/functions/inventory/inventory.getInventoryById
+    events:
+      - http:
+          path: serverlessSetup/inventory/id/{inventoryId}
+          method: get
+          cors: true
+  getInventoryList:
+    handler: src/functions/inventory/inventory.getInventoryList
+    events:
+      - http:
+          path: serverlessSetup/inventory/{employeeId}
+          method: get
+          cors: true
+  getPayrates:
+    handler: src/functions/payrates/payrates.getPayRates
+    events:
+      - http:
+          path: serverlessSetup/payrates
+          method: get
+          cors: true
+  addDoctype:
+    handler: src/functions/document/doctype.addDoctype
+    events:
+      - http:
+          path: serverlessSetup/document/doctype
+          method: post
+          cors: true
+  addDoctypeByEmployee:
+    handler: src/functions/document/doctype.addDoctypeByEmployee
+    events:
+      - http:
+          path: serverlessSetup/document/doctypeForEmployee
+          method: post
+          cors: true
+  getDoctypeForEmployee:
+    handler: src/functions/document/doctype.getDoctypeList
+    events:
+      - http:
+          path: serverlessSetup/document/doctype/employee/{employeeId}
+          method: get
+          cors: true
+  getDoctype:
+    handler: src/functions/document/doctype.getDoctypeById
+    events:
+      - http:
+          path: serverlessSetup/document/doctype/{doctypeId}
+          method: get
+          cors: true
+  uploadDocument:
+    handler: src/functions/document/document.uploadFile
+    events:
+      - http:
+          path: serverlessSetup/document/upload/{employeeId}/{doctypeId}
+          method: post
+          cors: true
+  getDocuments:
+    handler: src/functions/document/document.getFiles
+    events:
+      - http:
+          path: serverlessSetup/document/view/{employeeId}
+          method: get
+          cors: true
+  getCommonDoctypes:
+    handler: src/functions/document/doctype.getCommonDoctypeList
+    events:
+      - http:
+          path: serverlessSetup/document/doctype/getCommon
+          method: get
+          cors: true
+  addCompany:
+    handler: src/functions/er-module/company.addCompany
+    events:
+      - http:
+          path: serverlessSetup/er/company
+          method: post
+          cors: true
+  addFiles:
+    handler: src/functions/upload.uploadImage
+    events:
+      - http:
+          path: serverlessSetup/uploadImage
+          method: post
+          cors: true
+  addEmployeeType:
+    handler: src/functions/er-module/clinician.addEmployeeType
+    events:
+      - http:
+          path: serverlessSetup/er/employeeType
+          method: post
+          cors: true
+  addVisit:
+    handler: src/functions/er-module/visits.addVisit
+    events:
+      - http:
+          path: serverlessSetup/er/visit
+          method: post
+          cors: true
+  addMasterDoctype:
+    handler: src/functions/er-module/doctype.addMasterDoctype
+    events:
+      - http:
+          path: serverlessSetup/er/doctype
+          method: post
+          cors: true
+# Serverless plugins
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+# Resources your functions use
+resources:
+  Resources:
+    # SNS Topics
+    SNSHelloEvent:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: Hello Event Topic
+        TopicName: hello-event
